@@ -1,8 +1,8 @@
-import React from "react";
+import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
 
 const Navbar = () => {
-  const { auth, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -14,22 +14,26 @@ const Navbar = () => {
     }
   };
 
-  console.log(auth);
-
   return (
     <nav className="p-4 border-b">
-      <ul>
-        {!auth && (
-          <li>
-            <a href="/login">Login</a>
-          </li>
+      <ul className="flex items-center justify-between">
+        <div>
+          {!user && (
+            <li>
+              <a href="/login">Login</a>
+            </li>
+          )}
+          {user && (
+            <li>
+              <a href="/dashboard">Dashboard</a>
+            </li>
+          )}
+        </div>
+        {user && (
+          <Button variant="outline" onClick={handleLogout}>
+            Logout
+          </Button>
         )}
-        {auth && (
-          <li>
-            <a href="/dashboard">Dashboard</a>
-          </li>
-        )}
-        {auth && <button onClick={handleLogout}>Logout</button>}
       </ul>
     </nav>
   );

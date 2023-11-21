@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../context/AuthProvider";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const Login = () => {
   const { login } = useAuth();
@@ -28,7 +29,9 @@ const Login = () => {
   return (
     <div>
       <div className="container mx-auto">
-        <button onClick={handleSubmit}>Login with google</button>
+        <Button variant="outline" onClick={handleSubmit}>
+          Login with google
+        </Button>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
 import supabase from "../supabase";
 import { useAuth } from "../context/AuthProvider";
 
@@ -12,36 +13,53 @@ function Dashboard() {
   }, []);
 
   async function addTask() {
-    const { data } = await supabase.from("tasks").insert({ text });
-    setTasks([...tasks, data]);
+    const { data: task, error } = await supabase
+      .from("tasks")
+      .insert({ text, user_id: user.id })
+      .select("*");
+    if (error) console.log("error");
+    else {
+      setTasks([...tasks, task[0]]);
+      setText("");
+    }
   }
 
   async function getTasks() {
-    const { data } = await supabase.from("tasks").select();
+    const { data } = await supabase
+      .from("tasks")
+      .select()
+      .eq("user_id", user.id);
     setTasks(data);
   }
 
-  async function deleteTask(id) {
-    await supabase.from("tasks").delete().match({ id });
-    setTasks(tasks.filter((task) => task.id !== id));
+  async function deleteTask(id: number) {
+    try {
+      await supabase.from("tasks").delete().eq("id", id);
+      setTasks(tasks.filter((task) => task.id !== id));
+    } catch (error) {
+      console.log("error", error);
+    }
   }
+
+  console.log(tasks);
 
   return (
     <div>
-      <header>
-        <button onClick={signOut}>Logout</button>
-      </header>
-      <main>
+      <main className="container mx-auto">
         <input
           className="border"
           type="text"
           onChange={(e) => setText(e.target.value)}
         />
-        <button onClick={addTask}>Add</button>
+        <Button variant="outline" onClick={addTask}>
+          Add
+        </Button>
         {tasks.map(({ id, text }) => (
           <li key={id}>
             <span>{text}</span>
-            <button onClick={() => deleteTask(id)}>Delete</button>
+            <Button variant="outline" onClick={() => deleteTask(id)}>
+              Delete
+            </Button>
           </li>
         ))}
       </main>
