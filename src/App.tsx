@@ -1,7 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
+import Tasks from "./pages/Tasks";
 import AuthRoute from "./components/AuthRoute";
 import Navbar from "./components/Navbar";
 
@@ -13,7 +13,7 @@ const App = () => {
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route element={<AuthRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/tasks" element={<Tasks />} />
         </Route>
       </Routes>
     </>

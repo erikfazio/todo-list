@@ -1,3 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-[#F7F8FA];
+  }
+
+  ul,
+  ol {
+    @apply list-none list-inside;
+  }
+}

@@ -2,8 +2,9 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import supabase from "../supabase";
 import { useAuth } from "../context/AuthProvider";
+import clsx from "clsx";
 
-function Dashboard() {
+function Tasks() {
   const { user, signOut } = useAuth();
   const [text, setText] = useState("");
   const [tasks, setTasks] = useState([]);
@@ -32,6 +33,27 @@ function Dashboard() {
     setTasks(data);
   }
 
+  async function updateTaskStatus(id: number, done: boolean) {
+    try {
+      const { data: updatedTask, error } = await supabase
+        .from("tasks")
+        .update({ done })
+        .eq("id", id)
+        .select("*");
+
+      setTasks(
+        tasks.map((task) => {
+          if (task.id === id) {
+            return updatedTask[0];
+          }
+          return task;
+        })
+      );
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
   async function deleteTask(id: number) {
     try {
       await supabase.from("tasks").delete().eq("id", id);
@@ -40,8 +62,6 @@ function Dashboard() {
       console.log("error", error);
     }
   }
-
-  console.log(tasks);
 
   return (
     <div>
@@ -54,9 +74,19 @@ function Dashboard() {
         <Button variant="outline" onClick={addTask}>
           Add
         </Button>
-        {tasks.map(({ id, text }) => (
-          <li key={id}>
-            <span>{text}</span>
+        {tasks.map(({ id, text, done }) => (
+          <li
+            className="flex items-center justify-between bg-white p-4 border border-gray-200 rounded"
+            key={id}
+          >
+            <div className="flex items-center gap-x-8">
+              <input
+                type="checkbox"
+                checked={done}
+                onChange={() => updateTaskStatus(id, !done)}
+              />
+              <span className={clsx("", {})}>{text}</span>
+            </div>
             <Button variant="outline" onClick={() => deleteTask(id)}>
               Delete
             </Button>
@@ -67,4 +97,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Tasks;

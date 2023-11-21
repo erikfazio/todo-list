@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
@@ -15,26 +16,31 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="p-4 border-b">
-      <ul className="flex items-center justify-between">
-        <div>
+    <nav className="flex items-center justify-between gap-x-8 p-4 border-b bg-white">
+      <div className="flex gap-x-16">
+        <span className="font-bold text-lg">Todo list app</span>
+        <ul className="flex items-center">
           {!user && (
             <li>
-              <a href="/login">Login</a>
+              <Link to="/login">Login</Link>
             </li>
           )}
           {user && (
             <li>
-              <a href="/dashboard">Dashboard</a>
+              <Link to="/tasks">Tasks</Link>
             </li>
           )}
-        </div>
-        {user && (
+        </ul>
+      </div>
+
+      {user && (
+        <div className="flex gap-x-8 items-center">
+          <span>{user.email}</span>
           <Button variant="outline" onClick={handleLogout}>
             Logout
           </Button>
-        )}
-      </ul>
+        </div>
+      )}
     </nav>
   );
 };
