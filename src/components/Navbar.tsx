@@ -19,16 +19,21 @@ const Navbar = () => {
     <nav className="flex items-center justify-between gap-x-8 p-4 border-b bg-white">
       <div className="flex gap-x-16">
         <span className="font-bold text-lg">Todo list app</span>
-        <ul className="flex items-center">
+        <ul className="flex items-center gap-x-8">
           {!user && (
             <li>
               <Link to="/login">Login</Link>
             </li>
           )}
           {user && (
-            <li>
-              <Link to="/tasks">Tasks</Link>
-            </li>
+            <>
+              <li>
+                <Link to="/tasks">Tasks</Link>
+              </li>
+              <li>
+                <Link to="/skills">Skills</Link>
+              </li>
+            </>
           )}
         </ul>
       </div>

@@ -65,33 +65,38 @@ function Tasks() {
 
   return (
     <div>
-      <main className="container mx-auto">
-        <input
-          className="border"
-          type="text"
-          onChange={(e) => setText(e.target.value)}
-        />
-        <Button variant="outline" onClick={addTask}>
-          Add
-        </Button>
-        {tasks.map(({ id, text, done }) => (
-          <li
-            className="flex items-center justify-between bg-white p-4 border border-gray-200 rounded"
-            key={id}
-          >
-            <div className="flex items-center gap-x-8">
-              <input
-                type="checkbox"
-                checked={done}
-                onChange={() => updateTaskStatus(id, !done)}
-              />
-              <span className={clsx("", {})}>{text}</span>
-            </div>
-            <Button variant="outline" onClick={() => deleteTask(id)}>
-              Delete
-            </Button>
-          </li>
-        ))}
+      <main className="mt-16 container mx-auto flex flex-col gap-y-8">
+        <div className="flex items-center gap-x-8">
+          <input
+            className="border"
+            type="text"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
+          <Button variant="outline" onClick={addTask}>
+            Add
+          </Button>
+        </div>
+        <ul className="flex flex-col gap-y-4">
+          {tasks.map(({ id, text, done }) => (
+            <li
+              className="flex items-center justify-between bg-white p-4 border border-gray-200 rounded"
+              key={id}
+            >
+              <div className="flex items-center gap-x-8">
+                <input
+                  type="checkbox"
+                  checked={done}
+                  onChange={() => updateTaskStatus(id, !done)}
+                />
+                <span className={clsx("", {})}>{text}</span>
+              </div>
+              <Button variant="outline" onClick={() => deleteTask(id)}>
+                Delete
+              </Button>
+            </li>
+          ))}
+        </ul>
       </main>
     </div>
   );
