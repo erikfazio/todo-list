@@ -77,56 +77,55 @@ function Skills() {
   console.log(newSkill);
 
   return (
-    <div>
-      <main className="mt-16 container mx-auto flex flex-col gap-y-8">
-        {isAdmin() && (
-          <div className="flex gap-x-4 items-center">
-            <Input
-              type="text"
-              placeholder="Add skill"
-              value={newSkill}
-              onChange={(e) => setNewSkill(e.target.value)}
-            />
-            <Button variant="outline" onClick={addSkill}>
-              Add skill
-            </Button>
-          </div>
-        )}
+    <main className="mt-16 container mx-auto flex flex-col gap-y-8">
+      <h1 className="font-bold text-4xl">Skills</h1>
+      {isAdmin() && (
         <div className="flex gap-x-4 items-center">
-          <Select onValueChange={(skill) => setSelectedSkill(skill)}>
-            <SelectTrigger className="bg-white w-[180px]">
-              <SelectValue placeholder="Choose one skill" />
-            </SelectTrigger>
-            <SelectContent className="bg-white">
-              {getFilteredSkills()?.map(({ id, name }) => (
-                <SelectItem key={id} value={name}>
-                  {name}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Button variant="outline" onClick={addUserSkill}>
-            Add skill to your CV
+          <Input
+            type="text"
+            placeholder="Add skill"
+            value={newSkill}
+            onChange={(e) => setNewSkill(e.target.value)}
+          />
+          <Button variant="outline" onClick={addSkill}>
+            Add skill
           </Button>
         </div>
-        <ul className="flex flex-col gap-y-4">
-          {userSkills &&
-            userSkills.map(({ id, skills: { name } }) => (
-              <li
-                className="flex items-center justify-between bg-white p-4 border border-gray-200 rounded"
-                key={id}
-              >
-                <div className="flex items-center justify-between gap-x-8">
-                  <span className={clsx("", {})}>{name}</span>
-                </div>
-                <Button variant="outline" onClick={() => deleteUserSkill(id)}>
-                  Delete
-                </Button>
-              </li>
+      )}
+      <div className="flex gap-x-4 items-center">
+        <Select onValueChange={(skill) => setSelectedSkill(skill)}>
+          <SelectTrigger className="bg-white w-[180px]">
+            <SelectValue placeholder="Choose one skill" />
+          </SelectTrigger>
+          <SelectContent className="bg-white">
+            {getFilteredSkills()?.map(({ id, name }) => (
+              <SelectItem key={id} value={name}>
+                {name}
+              </SelectItem>
             ))}
-        </ul>
-      </main>
-    </div>
+          </SelectContent>
+        </Select>
+        <Button variant="outline" onClick={addUserSkill}>
+          Add skill to your CV
+        </Button>
+      </div>
+      <ul className="flex flex-col gap-y-4">
+        {userSkills &&
+          userSkills.map(({ id, skills: { name } }) => (
+            <li
+              className="flex items-center justify-between bg-white p-4 border border-gray-200 rounded"
+              key={id}
+            >
+              <div className="flex items-center justify-between gap-x-8">
+                <span className={clsx("", {})}>{name}</span>
+              </div>
+              <Button variant="outline" onClick={() => deleteUserSkill(id)}>
+                Delete
+              </Button>
+            </li>
+          ))}
+      </ul>
+    </main>
   );
 }
 
