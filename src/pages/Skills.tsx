@@ -10,9 +10,11 @@ import { Button } from "@/components/ui/button";
 import supabase from "../supabase";
 import { useAuth } from "../context/AuthProvider";
 import clsx from "clsx";
+import { Input } from "@/components/ui/input";
 
 function Skills() {
-  const { user, signOut } = useAuth();
+  const [newSkill, setNewSkill] = useState("");
+  const { user, isAdmin, signOut } = useAuth();
   const [skills, setSkills] = useState([]);
   const [userSkills, setUserSkills] = useState([]);
   const [selectedSkill, setSelectedSkill] = useState("");
@@ -28,6 +30,18 @@ function Skills() {
     return skills.filter((skill) =>
       userSkills.every((s) => s.skills.name !== skill.name)
     );
+  }
+
+  async function addSkill() {
+    const { data, error } = await supabase
+      .from("skills")
+      .insert({ name: newSkill })
+      .select();
+    if (error) console.log("error", error);
+    else {
+      setSkills([...skills, data[0]]);
+      setNewSkill("");
+    }
   }
 
   async function addUserSkill() {
@@ -60,11 +74,24 @@ function Skills() {
     getUserSkills().catch(console.error);
   }, []);
 
-  console.log(getFilteredSkills());
+  console.log(newSkill);
 
   return (
     <div>
       <main className="mt-16 container mx-auto flex flex-col gap-y-8">
+        {isAdmin() && (
+          <div className="flex gap-x-4 items-center">
+            <Input
+              type="text"
+              placeholder="Add skill"
+              value={newSkill}
+              onChange={(e) => setNewSkill(e.target.value)}
+            />
+            <Button variant="outline" onClick={addSkill}>
+              Add skill
+            </Button>
+          </div>
+        )}
         <div className="flex gap-x-4 items-center">
           <Select onValueChange={(skill) => setSelectedSkill(skill)}>
             <SelectTrigger className="bg-white w-[180px]">
@@ -79,7 +106,7 @@ function Skills() {
             </SelectContent>
           </Select>
           <Button variant="outline" onClick={addUserSkill}>
-            Add skill
+            Add skill to your CV
           </Button>
         </div>
         <ul className="flex flex-col gap-y-4">

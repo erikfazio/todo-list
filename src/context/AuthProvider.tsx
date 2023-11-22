@@ -15,6 +15,7 @@ const signOut = () => supabase.auth.signOut();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
+  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(null);
 
   useEffect(() => {
@@ -41,8 +42,12 @@ const AuthProvider = ({ children }) => {
     };
   }, []);
 
+  function isAdmin() {
+    return user?.app_metadata?.user_role === "ADMIN";
+  }
+
   return (
-    <AuthContext.Provider value={{ auth, user, login, signOut }}>
+    <AuthContext.Provider value={{ auth, user, login, isAdmin, signOut }}>
       {children}
     </AuthContext.Provider>
   );

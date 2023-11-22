@@ -1,9 +1,30 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const { user, signOut } = useAuth();
+  const { user, login, isAdmin, signOut } = useAuth();
+  const [errorMsg, setErrorMsg] = useState("");
+  const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      setErrorMsg("");
+      setLoading(true);
+      const {
+        data: { user, session },
+        error,
+      } = await login();
+      if (error) setErrorMsg(error.message);
+      if (user && session) navigate("/dashboard");
+    } catch (error) {
+      setErrorMsg("Error");
+    }
+    setLoading(false);
+  };
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -20,16 +41,8 @@ const Navbar = () => {
       <div className="flex gap-x-16">
         <span className="font-bold text-lg">Todo list app</span>
         <ul className="flex items-center gap-x-8">
-          {!user && (
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          )}
           {user && (
             <>
-              <li>
-                <Link to="/tasks">Tasks</Link>
-              </li>
               <li>
                 <Link to="/skills">Skills</Link>
               </li>
@@ -45,6 +58,11 @@ const Navbar = () => {
             Logout
           </Button>
         </div>
+      )}
+      {!user && (
+        <Button variant="outline" onClick={handleSubmit}>
+          Login with google
+        </Button>
       )}
     </nav>
   );
