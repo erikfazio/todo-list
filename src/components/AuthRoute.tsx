@@ -1,9 +1,10 @@
 import { useAuth } from "../context/AuthProvider";
-import { Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Sidebar from "./Sidebar";
 
 const AuthRoute = () => {
   const { user } = useAuth();
+  const location = useLocation();
 
   return (
     <>
