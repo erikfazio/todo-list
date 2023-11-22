@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import clsx from "clsx";
 
 const Navbar = () => {
   const { user, signOut } = useAuth();
+  const location = useLocation();
+  const { pathname } = location;
+
+  console.log(pathname);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -15,21 +20,44 @@ const Navbar = () => {
     }
   };
 
+  const pages = [
+    {
+      value: "/dashboard",
+      label: "Dashboard",
+    },
+    {
+      value: "/skills",
+      label: "Skills",
+    },
+  ];
+
+  console.log(user);
+
   return (
-    <nav className="flex flex-col items-center justify-between gap-x-8 p-4 border-b bg-white">
+    <nav className="flex flex-col items-center justify-between gap-x-8 py-8 px-16 border-r bg-white">
       <div>
         <span className="font-bold text-lg">Internal tool</span>
-        <ul className="flex mt-16 items-center gap-x-8">
-          <>
-            <li>
-              <Link to="/skills">Skills</Link>
+        <ul className="flex flex-col gap-y-8 mt-16 items-center gap-x-8">
+          {pages.map(({ value, label }) => (
+            <li
+              className={clsx("", {
+                "font-bold": pathname === value,
+              })}
+            >
+              <Link to={value}>{label}</Link>
             </li>
-          </>
+          ))}
         </ul>
       </div>
 
-      <div className="flex gap-x-8 items-center">
-        <span>{user.email}</span>
+      <div className="flex flex-col gap-y-8 items-center">
+        <div className="flex gap-x-4 items-center">
+          <img
+            src={user.user_metadata.avatar_url}
+            className="w-8 h-8 rounded-full"
+          />
+          <span>{user.user_metadata.full_name}</span>
+        </div>
         <Button variant="outline" onClick={handleLogout}>
           Logout
         </Button>
