@@ -1,5 +1,5 @@
+import useSupabase from "@/hooks/useSupabase";
 import { createContext, useContext, useEffect, useState } from "react";
-import supabase from "../supabase";
 import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext({});
@@ -7,18 +7,19 @@ const AuthContext = createContext({});
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 
-const login = () => {
-  supabase.auth.signInWithOAuth({ provider: "google" });
-};
-
-const signOut = () => supabase.auth.signOut();
-
 const AuthProvider = ({ children }) => {
+  const supabase = useSupabase();
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
   const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(null);
   const navigate = useNavigate();
+
+  const login = () => {
+    supabase.auth.signInWithOAuth({ provider: "google" });
+  };
+
+  const signOut = () => supabase.auth.signOut();
 
   useEffect(() => {
     setLoading(true);
