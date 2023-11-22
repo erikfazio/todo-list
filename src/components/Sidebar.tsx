@@ -3,12 +3,10 @@ import { useAuth } from "../context/AuthProvider";
 import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 
-const Navbar = () => {
+const Sidebar = () => {
   const { user, signOut } = useAuth();
   const location = useLocation();
   const { pathname } = location;
-
-  console.log(pathname);
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -29,9 +27,11 @@ const Navbar = () => {
       value: "/skills",
       label: "Skills",
     },
+    {
+      value: "/users",
+      label: "Users",
+    },
   ];
-
-  console.log(user);
 
   return (
     <nav className="flex flex-col items-center justify-between gap-x-8 py-8 px-16 border-r bg-white">
@@ -40,6 +40,7 @@ const Navbar = () => {
         <ul className="flex flex-col gap-y-8 mt-16 items-center gap-x-8">
           {pages.map(({ value, label }) => (
             <li
+              key={value}
               className={clsx("", {
                 "font-bold": pathname === value,
               })}
@@ -66,4 +67,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default Sidebar;
