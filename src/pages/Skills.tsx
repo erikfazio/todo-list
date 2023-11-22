@@ -23,6 +23,13 @@ function Skills() {
     else setSkills(data);
   }
 
+  function getFilteredSkills() {
+    console.log(skills, userSkills);
+    return skills.filter((skill) =>
+      userSkills.every((s) => s.skills.name !== skill.name)
+    );
+  }
+
   async function addUserSkill() {
     const skillId = skills.find((skill) => skill.name === selectedSkill)?.id;
     const { data, error } = await supabase
@@ -53,6 +60,8 @@ function Skills() {
     getUserSkills().catch(console.error);
   }, []);
 
+  console.log(getFilteredSkills());
+
   return (
     <div>
       <main className="mt-16 container mx-auto flex flex-col gap-y-8">
@@ -62,7 +71,7 @@ function Skills() {
               <SelectValue placeholder="Choose one skill" />
             </SelectTrigger>
             <SelectContent className="bg-white">
-              {skills.map(({ id, name }) => (
+              {getFilteredSkills()?.map(({ id, name }) => (
                 <SelectItem key={id} value={name}>
                   {name}
                 </SelectItem>
