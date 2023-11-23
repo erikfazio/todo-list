@@ -1,4 +1,13 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import {
   Select,
   SelectContent,
@@ -7,124 +16,89 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import supabase from "../supabase";
 import { useAuth } from "../context/AuthProvider";
-import clsx from "clsx";
 import { Input } from "@/components/ui/input";
+import useSkillQuery from "@/hooks/useSkillQuery";
+import useAddSkillMutation from "@/hooks/useAddSkillMutation";
+import useDeleteSkillMutation from "@/hooks/useDeleteSkillMutation";
 
 function Skills() {
+  const { isAdmin } = useAuth();
   const [newSkill, setNewSkill] = useState("");
-  const { user, isAdmin, signOut } = useAuth();
-  const [skills, setSkills] = useState([]);
-  const [userSkills, setUserSkills] = useState([]);
-  const [selectedSkill, setSelectedSkill] = useState("");
 
-  async function getSkills() {
-    const { data, error } = await supabase.from("skills").select();
-    if (error) console.log("error", error);
-    else setSkills(data);
-  }
+  // Skills
+  const { data: skills, isLoading: isSkillsLoading } = useSkillQuery();
+  const addSkillMutation = useAddSkillMutation();
+  const deleteSkillMutation = useDeleteSkillMutation();
 
-  function getFilteredSkills() {
-    console.log(skills, userSkills);
-    return skills.filter((skill) =>
-      userSkills.every((s) => s.skills.name !== skill.name)
-    );
-  }
+  const addSkill = () => {
+    addSkillMutation.mutate(newSkill);
+    setNewSkill("");
+  };
 
-  async function addSkill() {
-    const { data, error } = await supabase
-      .from("skills")
-      .insert({ name: newSkill })
-      .select();
-    if (error) console.log("error", error);
-    else {
-      setSkills([...skills, data[0]]);
-      setNewSkill("");
-    }
-  }
+  const deleteSkill = (id: number) => {
+    deleteSkillMutation.mutate(id);
+  };
 
-  async function addUserSkill() {
-    const skillId = skills.find((skill) => skill.name === selectedSkill)?.id;
-    const { data, error } = await supabase
-      .from("user_skills")
-      .insert({ skill_id: skillId, user_id: user.id })
-      .select("id, skills(name) as name");
-    if (error) console.log("error", error);
-    else setUserSkills([...userSkills, data[0]]);
-  }
-
-  async function deleteUserSkill(id: number) {
-    const { error } = await supabase.from("user_skills").delete().eq("id", id);
-    if (error) console.log("error", error);
-    else setUserSkills(userSkills.filter((skill) => skill.id !== id));
-  }
-
-  async function getUserSkills() {
-    const { data, error } = await supabase
-      .from("user_skills")
-      .select("id, skills(name) as name")
-      .eq("user_id", user.id);
-    if (error) console.log("Error", error);
-    else setUserSkills(data);
-  }
-
-  useEffect(() => {
-    getSkills().catch(console.error);
-    getUserSkills().catch(console.error);
-  }, []);
-
-  console.log(newSkill);
+  console.log(isAdmin());
 
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
-      <h1 className="font-bold text-4xl">Skills</h1>
-      {isAdmin() && (
-        <div className="flex gap-x-4 items-center">
-          <Input
-            type="text"
-            placeholder="Add skill"
-            value={newSkill}
-            onChange={(e) => setNewSkill(e.target.value)}
-          />
-          <Button variant="outline" onClick={addSkill}>
-            Add skill
-          </Button>
-        </div>
-      )}
-      <div className="flex gap-x-4 items-center">
-        <Select onValueChange={(skill) => setSelectedSkill(skill)}>
-          <SelectTrigger className="bg-white w-[180px]">
-            <SelectValue placeholder="Choose one skill" />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            {getFilteredSkills()?.map(({ id, name }) => (
-              <SelectItem key={id} value={name}>
-                {name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-        <Button variant="outline" onClick={addUserSkill}>
-          Add skill to your CV
-        </Button>
+      <div className="flex justify-between">
+        <h1 className="font-bold text-4xl">Skills</h1>
+        {isAdmin() && (
+          <div className="flex gap-x-4 items-center">
+            <Input
+              type="text"
+              placeholder="Add skill"
+              value={newSkill}
+              onChange={(e) => setNewSkill(e.target.value)}
+            />
+            <Button variant="outline" onClick={addSkill}>
+              Add skill
+            </Button>
+          </div>
+        )}
       </div>
-      <ul className="flex flex-col gap-y-4">
-        {userSkills &&
-          userSkills.map(({ id, skills: { name } }) => (
+      {isAdmin() && !isSkillsLoading && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {skills?.map(({ id, name }) => (
+              <TableRow key={id}>
+                <TableCell className="font-medium">{name}</TableCell>
+                <TableCell>
+                  <Button variant="outline" onClick={() => deleteSkill(id)}>
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
+      {/* {isAdmin() && !isSkillsLoading && (
+        <ul className="flex flex-col gap-y-4">
+          {skills?.map(({ id, name }) => (
             <li
               className="flex items-center justify-between bg-white p-4 border border-gray-200 rounded"
               key={id}
             >
               <div className="flex items-center justify-between gap-x-8">
-                <span className={clsx("", {})}>{name}</span>
+                <span className="">{name}</span>
               </div>
-              <Button variant="outline" onClick={() => deleteUserSkill(id)}>
+              <Button variant="outline" onClick={() => deleteSkill(id)}>
                 Delete
               </Button>
             </li>
           ))}
-      </ul>
+        </ul>
+      )} */}
     </main>
   );
 }

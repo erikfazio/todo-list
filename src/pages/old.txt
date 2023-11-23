@@ -1,0 +1,18 @@
+  // function getFilteredSkills() {
+  //   console.log(skills, userSkills);
+  //   return skills.filter((skill) =>
+  //     userSkills.every((s) => s.skills.name !== skill.name)
+  //   );
+  // }
+
+  // async function addUserSkill() {
+  //   const skillId = skills.find((skill) => skill.name === selectedSkill)?.id;
+  //   const { data, error } = await supabase
+  //     .from("user_skills")
+  //     .insert({ skill_id: skillId, user_id: user.id })
+  //     .select("id, skills(name) as name");
+  //   if (error) console.log("error", error);
+  //   else setUserSkills([...userSkills, data[0]]);
+  // }
+
+  console.log(skills);
