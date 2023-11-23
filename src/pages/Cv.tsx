@@ -12,7 +12,7 @@ import { useAuth } from "../context/AuthProvider";
 import { Input } from "@/components/ui/input";
 import useUsersQuery from "@/hooks/users/useUsersQuery";
 
-function Skills() {
+function Cv() {
   const { user, isAdmin, signOut } = useAuth();
   const { data: users, isLoading: isUsersLoading } = useUsersQuery();
 
@@ -21,7 +21,7 @@ function Skills() {
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
       <div className="flex justify-between">
-        <h1 className="font-bold text-4xl">Users</h1>
+        <h1 className="font-bold text-4xl">CV</h1>
       </div>
       {isAdmin() && !isUsersLoading && (
         <Table>
@@ -45,4 +45,4 @@ function Skills() {
   );
 }
 
-export default Skills;
+export default Cv;

@@ -11,14 +11,3 @@ export function addSkill(client: SupabaseClient, name: string) {
 export function deleteSkill(client: SupabaseClient, id: number) {
   return client.from("skills").delete().eq("id", id);
 }
-
-export function deleteUserSkill(client: SupabaseClient, id: number) {
-  return client.from("user_skills").delete().eq("id", id);
-}
-
-export function getSkillsByUserId(client: SupabaseClient, userId: string) {
-  return client
-    .from("user_skills")
-    .select("id, skills(name) as name")
-    .eq("user_id", userId);
-}

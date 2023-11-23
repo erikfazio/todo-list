@@ -1,6 +1,6 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { deleteUserSkill } from "@/queries/skills";
-import useSupabase from "./useSupabase";
+import useSupabase from "../useSupabase";
 
 function useDeleteUserSkillMutation() {
   const client = useSupabase();

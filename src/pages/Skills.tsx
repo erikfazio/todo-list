@@ -21,6 +21,7 @@ import { Input } from "@/components/ui/input";
 import useSkillQuery from "@/hooks/useSkillQuery";
 import useAddSkillMutation from "@/hooks/useAddSkillMutation";
 import useDeleteSkillMutation from "@/hooks/useDeleteSkillMutation";
+import useUserSkillsQuery from "@/hooks/userSkills/useUserSkillsQuery";
 
 function Skills() {
   const { isAdmin } = useAuth();
@@ -28,6 +29,8 @@ function Skills() {
 
   // Skills
   const { data: skills, isLoading: isSkillsLoading } = useSkillQuery();
+  const { data: userSkills, isLoading: isUserSkillsLoading } =
+    useUserSkillsQuery();
   const addSkillMutation = useAddSkillMutation();
   const deleteSkillMutation = useDeleteSkillMutation();
 
@@ -40,7 +43,7 @@ function Skills() {
     deleteSkillMutation.mutate(id);
   };
 
-  console.log(isAdmin());
+  console.log(userSkills);
 
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
@@ -82,23 +85,24 @@ function Skills() {
           </TableBody>
         </Table>
       )}
-      {/* {isAdmin() && !isSkillsLoading && (
-        <ul className="flex flex-col gap-y-4">
-          {skills?.map(({ id, name }) => (
-            <li
-              className="flex items-center justify-between bg-white p-4 border border-gray-200 rounded"
-              key={id}
-            >
-              <div className="flex items-center justify-between gap-x-8">
-                <span className="">{name}</span>
-              </div>
-              <Button variant="outline" onClick={() => deleteSkill(id)}>
-                Delete
-              </Button>
-            </li>
-          ))}
-        </ul>
-      )} */}
+      {!isAdmin() && !isUserSkillsLoading && (
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Level</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {userSkills?.map(({ name, level }) => (
+              <TableRow key={name?.name}>
+                <TableCell className="font-medium">{name?.name}</TableCell>
+                <TableCell>{level?.name}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      )}
     </main>
   );
 }

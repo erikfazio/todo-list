@@ -31,6 +31,10 @@ const Sidebar = () => {
       value: "/users",
       label: "Users",
     },
+    {
+      value: "/cv",
+      label: "CV",
+    },
   ];
 
   return (
