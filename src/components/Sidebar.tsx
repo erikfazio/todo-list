@@ -61,7 +61,7 @@ const Sidebar = () => {
             src={user.user_metadata.avatar_url}
             className="w-8 h-8 rounded-full"
           />
-          <span>{user.user_metadata.full_name}</span>
+          <Link to="/profile">{user.user_metadata.full_name}</Link>
         </div>
         <Button variant="outline" onClick={handleLogout}>
           Logout
