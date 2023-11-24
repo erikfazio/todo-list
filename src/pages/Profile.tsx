@@ -4,46 +4,57 @@ import { useAuth } from "../context/AuthProvider";
 import { Input } from "@/components/ui/input";
 import useUsersQuery from "@/hooks/users/useUsersQuery";
 import useUserByIdQuery from "@/hooks/users/useUserByIdQuery";
+import { useForm } from "react-hook-form";
 import useUpdateUserByUserIdMutation from "@/hooks/users/useUpdateUserByUserIdMutation";
 
 function Profile() {
   const { data: profile, isLoading: isProfileLoading } = useUserByIdQuery();
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const { user, isAdmin, signOut } = useAuth();
-  const { data: users, isLoading: isUsersLoading } = useUsersQuery();
+  const { user } = useAuth();
   const updateProfile = useUpdateUserByUserIdMutation();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const handleUpdateProfile = () => {
+  const handleUpdateProfile = (data: any) => {
+    console.log(data);
     updateProfile.mutate({
       id: user.id,
-      first_name: firstName,
-      last_name: lastName,
+      ...data,
     });
   };
 
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
-      <div className="flex justify-between">
-        <h1 className="font-bold text-4xl">Profile</h1>
-        <Button variant="outline" onClick={handleUpdateProfile}>
-          Update profile
-        </Button>
-      </div>
-      <div className="container mx-auto flex flex-col gap-y-8">
-        <Input
-          type="text"
-          placeholder="First name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <Input
-          type="text"
-          placeholder="Last name"
-          value={lastName}
-          onChange={(e) => setLastName(e.target.value)}
-        />
-      </div>
+      {!isProfileLoading && (
+        <>
+          <div className="flex justify-between">
+            <h1 className="font-bold text-4xl">Profile</h1>
+            <Button variant="outline" onClick={handleUpdateProfile}>
+              Update profile
+            </Button>
+          </div>
+          <form
+            className="container mx-auto flex flex-col gap-y-8"
+            onSubmit={handleSubmit(handleUpdateProfile)}
+          >
+            <Input
+              type="text"
+              placeholder="First name"
+              {...register("first_name", { required: true })}
+            />
+            {errors.first_name && <span>This field is required</span>}
+            <Input
+              type="text"
+              placeholder="Last name"
+              {...register("last_name", { required: true })}
+            />
+            {errors.last_name && <span>This field is required</span>}
+            <Input type="submit" />
+          </form>
+        </>
+      )}
     </main>
   );
 }
