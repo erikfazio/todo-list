@@ -8,4 +8,19 @@ export function getContactsByUserId(client: SupabaseClient, userId: string) {
     .eq("from_id", userId);
 }
 
-// .select("skill_id, user_id, name:skills(name), level:skill_levels(name)")
+export function addContact(client: SupabaseClient, data: any) {
+  console.log(data);
+  return client.from("contacts").insert(data);
+}
+
+export function deleteContact(
+  client: SupabaseClient,
+  fromId: string,
+  toId: string
+) {
+  return client
+    .from("contacts")
+    .delete()
+    .eq("from_id", fromId)
+    .eq("to_id", toId);
+}
