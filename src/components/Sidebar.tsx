@@ -6,7 +6,9 @@ import useUserByIdQuery from "@/hooks/users/useUserByIdQuery";
 
 const Sidebar = () => {
   const { user, isAdmin, signOut } = useAuth();
-  const { data: profile, isLoading: isProfileLoading } = useUserByIdQuery();
+  const { data: profile, isLoading: isProfileLoading } = useUserByIdQuery(
+    user.id
+  );
   const location = useLocation();
   const { pathname } = location;
 

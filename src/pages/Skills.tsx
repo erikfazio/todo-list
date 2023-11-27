@@ -2,35 +2,27 @@ import { useState } from "react";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
 import { Input } from "@/components/ui/input";
 import useSkillQuery from "@/hooks/useSkillQuery";
 import useAddSkillMutation from "@/hooks/useAddSkillMutation";
 import useDeleteSkillMutation from "@/hooks/useDeleteSkillMutation";
-import useUserSkillsQuery from "@/hooks/userSkills/useUserSkillsQuery";
+import useUserSkillsByUserIdQuery from "@/hooks/userSkills/useUserSkillsQuery";
 
 function Skills() {
-  const { isAdmin } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [newSkill, setNewSkill] = useState("");
 
   // Skills
   const { data: skills, isLoading: isSkillsLoading } = useSkillQuery();
   const { data: userSkills, isLoading: isUserSkillsLoading } =
-    useUserSkillsQuery();
+    useUserSkillsByUserIdQuery(user.id || "");
   const addSkillMutation = useAddSkillMutation();
   const deleteSkillMutation = useDeleteSkillMutation();
 
