@@ -50,6 +50,11 @@ const Sidebar = () => {
       label: "CV",
       isAdminOnly: true,
     },
+    {
+      value: "/contact-list",
+      label: "Contact list",
+      isAdminOnly: false,
+    },
   ];
 
   console.log(profile);
