@@ -35,10 +35,12 @@ const ContactList = () => {
   const [selectedUser, setSelectedUser] = useState();
 
   const filteredUsers = () => {
-    return users?.filter((user) =>
-      contacts?.every((contact) => contact.to.id !== user.id)
+    return users?.filter((currentUser) =>
+      contacts?.every((contact) => contact.to.id !== currentUser.id)
     );
   };
+
+  console.log(filteredUsers());
 
   const handleUpdateContact = (
     from_id: string,
@@ -55,8 +57,6 @@ const ContactList = () => {
   const handleDeleteContact = (from_id: string, to_id: string) => {
     deleteContact.mutate({ from_id, to_id });
   };
-
-  console.log("contacts", contacts);
 
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">

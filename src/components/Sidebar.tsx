@@ -63,8 +63,6 @@ const Sidebar = () => {
     },
   ];
 
-  console.log(profile);
-
   return (
     <nav className="flex flex-col items-center justify-between gap-x-8 py-8 px-16 border-r bg-white">
       <div>

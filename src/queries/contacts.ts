@@ -1,7 +1,6 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export function getContactsByUserId(client: SupabaseClient, userId: string) {
-  console.log(userId);
   return client
     .from("contacts")
     .select("to:users!to_id(*), is_favorite")
@@ -9,7 +8,6 @@ export function getContactsByUserId(client: SupabaseClient, userId: string) {
 }
 
 export function addContact(client: SupabaseClient, data: any) {
-  console.log(data);
   return client.from("contacts").insert(data);
 }
 

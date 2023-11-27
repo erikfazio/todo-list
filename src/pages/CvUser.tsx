@@ -62,8 +62,6 @@ const CvUser = () => {
     );
   };
 
-  console.log(userSkills);
-
   const deleteSkill = (skillId: number, userId: string) => {
     deleteUserSkill.mutate({ skillId, userId });
   };
