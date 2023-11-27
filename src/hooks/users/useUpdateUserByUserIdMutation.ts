@@ -1,9 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateUserById } from "@/queries/users";
 import useSupabase from "../useSupabase";
+import { useAuth } from "@/context/AuthProvider";
 
 function useUpdateUserByUserIdMutation() {
+  const { user } = useAuth();
   const client = useSupabase();
+  const queryClient = useQueryClient();
 
   const mutationFn = async (data: any) => {
     console.log(data);
@@ -12,6 +15,7 @@ function useUpdateUserByUserIdMutation() {
 
   return useMutation({
     mutationFn,
+    onSuccess: () => queryClient.invalidateQueries(["users", user.id]),
   });
 }
 

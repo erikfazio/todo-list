@@ -5,7 +5,7 @@ export function getUsers(client: SupabaseClient) {
 }
 
 export function getUserById(client: SupabaseClient, id: string) {
-  return client.from("users").select("*").eq("id", id);
+  return client.from("users").select("*").eq("id", id).limit(1).single();
 }
 
 export function updateUserById(client: SupabaseClient, data: any) {

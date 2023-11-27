@@ -9,7 +9,6 @@ type FormData = {
 };
 
 const ProfileForm = ({ defaultValues }: any) => {
-  console.log(defaultValues);
   const {
     register,
     handleSubmit,

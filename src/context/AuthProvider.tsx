@@ -11,7 +11,6 @@ const AuthProvider = ({ children }) => {
   const supabase = useSupabase();
   const [user, setUser] = useState(null);
   const [auth, setAuth] = useState(false);
-  const [role, setRole] = useState(null);
   const [loading, setLoading] = useState(null);
   const navigate = useNavigate();
 
@@ -29,6 +28,7 @@ const AuthProvider = ({ children }) => {
       setUser(currentUser ?? null);
       setLoading(false);
     };
+
     getUser();
 
     const { data } = supabase.auth.onAuthStateChange((event, session) => {

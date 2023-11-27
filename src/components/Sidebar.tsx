@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 
 const Sidebar = () => {
-  const { user, signOut } = useAuth();
+  const { user, isAdmin, signOut } = useAuth();
   const location = useLocation();
   const { pathname } = location;
 
@@ -22,18 +22,22 @@ const Sidebar = () => {
     {
       value: "/dashboard",
       label: "Dashboard",
+      isAdminOnly: false,
     },
     {
       value: "/skills",
       label: "Skills",
+      isAdminOnly: false,
     },
     {
       value: "/users",
       label: "Users",
+      isAdminOnly: false,
     },
     {
       value: "/cv",
       label: "CV",
+      isAdminOnly: true,
     },
   ];
 
@@ -42,16 +46,23 @@ const Sidebar = () => {
       <div>
         <span className="font-bold text-lg">Internal tool</span>
         <ul className="flex flex-col gap-y-8 mt-16 items-center gap-x-8">
-          {pages.map(({ value, label }) => (
-            <li
-              key={value}
-              className={clsx("", {
-                "font-bold": pathname === value,
-              })}
-            >
-              <Link to={value}>{label}</Link>
-            </li>
-          ))}
+          {pages.map(({ value, label, isAdminOnly }) => {
+            if ((isAdminOnly && isAdmin()) || !isAdminOnly) {
+              return (
+                <li key={value}>
+                  <Link
+                    to={value}
+                    className={clsx(
+                      "flex items-center gap-x-4 text-lg",
+                      pathname === value && "font-bold"
+                    )}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              );
+            }
+          })}
         </ul>
       </div>
 

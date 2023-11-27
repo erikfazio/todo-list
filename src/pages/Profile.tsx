@@ -5,8 +5,6 @@ import ProfileForm from "@/components/ProfileForm";
 function Profile() {
   const { data: profile, isLoading: isProfileLoading } = useUserByIdQuery();
 
-  console.log(profile);
-
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
       {!isProfileLoading && profile && (
