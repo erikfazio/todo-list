@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 import { useState } from "react";
 import useAddContactMutation from "@/hooks/contacts/useAddContactMutation";
+import useUpdateContactMutation from "@/hooks/contacts/useUpdateContactMutation";
 
 const ContactList = () => {
   const { user } = useAuth();
@@ -28,47 +29,60 @@ const ContactList = () => {
     useContactsByUserIdQuery("ac73b7bc-b58f-47e1-bda1-25538022302c");
   const deleteContact = useDeleteContactMutation();
   const addContact = useAddContactMutation();
+  const updateContact = useUpdateContactMutation();
 
   // State
   const [selectedUser, setSelectedUser] = useState();
 
   const filteredUsers = () => {
-    return users;
+    return users?.filter((user) =>
+      contacts?.every((contact) => contact.to.id !== user.id)
+    );
+  };
+
+  const handleUpdateContact = (
+    from_id: string,
+    to_id: string,
+    is_favorite: boolean
+  ) => {
+    updateContact.mutate({ from_id, to_id, is_favorite });
   };
 
   const handleAddContact = () => {
     addContact.mutate({ from_id: user.id, to_id: selectedUser });
   };
 
-  const handleDeleteContact = (fromId: string, toId: string) => {
-    deleteContact.mutate({ fromId, toId });
+  const handleDeleteContact = (from_id: string, to_id: string) => {
+    deleteContact.mutate({ from_id, to_id });
   };
+
+  console.log("contacts", contacts);
 
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
       <div className="flex justify-between">
         <h1 className="font-bold text-4xl">CV</h1>
-      </div>
-      <div>
-        <Select
-          value={selectedUser}
-          onValueChange={(value) => setSelectedUser(value)}
-        >
-          <SelectTrigger className="w-[180px] ">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent className="bg-white">
-            {users?.map(({ id, first_name, last_name }) => (
-              <SelectItem key={id} value={id}>
-                {first_name} {last_name}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+        <div className="flex gap-x-8">
+          <Select
+            value={selectedUser}
+            onValueChange={(value) => setSelectedUser(value)}
+          >
+            <SelectTrigger className="w-[180px] ">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent className="bg-white">
+              {filteredUsers()?.map(({ id, first_name, last_name }) => (
+                <SelectItem key={id} value={id}>
+                  {first_name} {last_name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
 
-        <Button variant="outline" onClick={handleAddContact}>
-          Add contact
-        </Button>
+          <Button variant="outline" onClick={handleAddContact}>
+            Add contact
+          </Button>
+        </div>
       </div>
 
       <Table>
@@ -79,21 +93,31 @@ const ContactList = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {contacts?.map(({ to }) => (
-            <TableRow key={to.id}>
-              <TableCell className="font-medium">
-                {to.first_name} {to.last_name}
-              </TableCell>
-              <TableCell>
-                <Button
-                  variant="outline"
-                  onClick={() => handleDeleteContact(user.id, to.id)}
-                >
-                  Delete
-                </Button>
-              </TableCell>
-            </TableRow>
-          ))}
+          {contacts?.map(
+            ({ to: { id, first_name, last_name }, is_favorite }) => (
+              <TableRow key={id}>
+                <TableCell className="font-medium">
+                  {first_name} {last_name} {is_favorite && "⭐️"}
+                </TableCell>
+                <TableCell className="flex gap-x-8">
+                  <Button
+                    variant="outline"
+                    onClick={() =>
+                      handleUpdateContact(user.id, id, !is_favorite)
+                    }
+                  >
+                    {is_favorite ? "Remove from favorites" : "Add to favorites"}
+                  </Button>
+                  <Button
+                    variant="outline"
+                    onClick={() => handleDeleteContact(user.id, id)}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            )
+          )}
         </TableBody>
       </Table>
     </main>
