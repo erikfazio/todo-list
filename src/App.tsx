@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard";
 import Skills from "./pages/Skills";
 import Users from "./pages/Users";
 import Cv from "./pages/Cv";
+import CvUser from "./pages/CvUser";
 import Profile from "./pages/Profile";
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
           <Route path="/users" element={<Users />} />
           <Route path="/cv" element={<Cv />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/cv/:id" element={<CvUser />} />
         </Route>
       </Routes>
     </>

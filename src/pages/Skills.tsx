@@ -43,8 +43,6 @@ function Skills() {
     deleteSkillMutation.mutate(id);
   };
 
-  console.log(userSkills);
-
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
       <div className="flex justify-between">

@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
 import { Input } from "@/components/ui/input";
 import useUsersQuery from "@/hooks/users/useUsersQuery";
+import { Link } from "react-router-dom";
 
 function Skills() {
   const { user, isAdmin, signOut } = useAuth();
@@ -31,9 +32,12 @@ function Skills() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.map(({ id, description }) => (
+            {users?.map(({ id, first_name, last_name }) => (
               <TableRow key={id}>
                 <TableCell className="font-medium">{id}</TableCell>
+                <TableCell className="font-medium">
+                  <Link to={`/cv/${id}`}>{`${first_name} ${last_name}`}</Link>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

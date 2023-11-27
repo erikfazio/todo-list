@@ -9,7 +9,6 @@ function useUpdateUserByUserIdMutation() {
   const queryClient = useQueryClient();
 
   const mutationFn = async (data: any) => {
-    console.log(data);
     return updateUserById(client, data).then((result) => result.data);
   };
 

@@ -52,6 +52,8 @@ function Cv() {
     );
   };
 
+  console.log(users);
+
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
       <div className="flex justify-between">
@@ -66,9 +68,9 @@ function Cv() {
             <SelectValue />
           </SelectTrigger>
           <SelectContent className="bg-white">
-            {users?.map(({ id }) => (
+            {users?.map(({ id, first_name, last_name }) => (
               <SelectItem key={id} value={id}>
-                {id}
+                {first_name} {last_name}
               </SelectItem>
             ))}
           </SelectContent>
@@ -112,14 +114,15 @@ function Cv() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {users?.map(({ id, description }) => (
+            {users?.map(({ id, first_name, last_name }) => (
               <TableRow key={id}>
-                <TableCell className="font-medium">{id}</TableCell>
+                <TableCell className="font-medium">
+                  {first_name} {last_name}
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

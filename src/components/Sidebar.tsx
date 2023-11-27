@@ -11,7 +11,7 @@ const Sidebar = () => {
   const { pathname } = location;
 
   const getDisplayName = () => {
-    if (profile.first_name && profile.last_name) {
+    if (profile?.first_name && profile?.last_name) {
       return `${profile.first_name} ${profile.last_name}`;
     }
     return user.user_metadata.full_name;

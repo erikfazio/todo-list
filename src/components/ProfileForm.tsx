@@ -23,7 +23,6 @@ const ProfileForm = ({ defaultValues }: any) => {
   const updateProfile = useUpdateUserByUserIdMutation();
 
   const handleUpdateProfile = (data: FormData) => {
-    console.log(data);
     updateProfile.mutate({
       id: user.id,
       ...data,
