@@ -56,12 +56,6 @@ const Sidebar = () => {
       icon: <PiUserBold />,
     },
     {
-      value: "/cv",
-      label: "CV",
-      isAdminOnly: true,
-      icon: <PiReadCvLogoBold />,
-    },
-    {
       value: "/contact-list",
       label: "Contact list",
       isAdminOnly: false,
@@ -103,7 +97,12 @@ const Sidebar = () => {
             src={user.user_metadata.avatar_url}
             className="w-8 h-8 rounded-full"
           />
-          <Link to="/profile">{getDisplayName()}</Link>
+          <Link
+            to="/profile"
+            className={clsx("", pathname === "/profile" && "font-bold")}
+          >
+            {getDisplayName()}
+          </Link>
         </div>
         <Button variant="outline" onClick={handleLogout}>
           Logout

@@ -31,7 +31,7 @@ const ProfileForm = ({ defaultValues }: any) => {
 
   return (
     <form
-      className="container mx-auto flex flex-col gap-y-8"
+      className="container mx-auto flex flex-col px-0 gap-y-8"
       onSubmit={handleSubmit(handleUpdateProfile)}
     >
       <Input
@@ -46,7 +46,7 @@ const ProfileForm = ({ defaultValues }: any) => {
         {...register("last_name", { required: true })}
       />
       {errors.last_name && <span>This field is required</span>}
-      <Input type="submit" />
+      <Input type="submit" className="cursor-pointer" />
     </form>
   );
 };

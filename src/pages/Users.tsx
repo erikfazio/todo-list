@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   Table,
   TableBody,
@@ -7,14 +6,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
-import { Input } from "@/components/ui/input";
 import useUsersQuery from "@/hooks/users/useUsersQuery";
 import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 function Skills() {
-  const { user, isAdmin, signOut } = useAuth();
+  const { isAdmin } = useAuth();
   const { data: users, isLoading: isUsersLoading } = useUsersQuery();
 
   return (
@@ -27,16 +25,19 @@ function Skills() {
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Description</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {users?.map(({ id, first_name, last_name }) => (
               <TableRow key={id}>
-                <TableCell className="font-medium">{id}</TableCell>
                 <TableCell className="font-medium">
                   <Link to={`/cv/${id}`}>{`${first_name} ${last_name}`}</Link>
+                </TableCell>
+                <TableCell>
+                  <Link to={`/cv/${id}`}>
+                    <Button variant="outline">Open CV</Button>
+                  </Link>
                 </TableCell>
               </TableRow>
             ))}

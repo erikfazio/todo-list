@@ -61,7 +61,7 @@ const ContactList = () => {
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
       <div className="flex justify-between">
-        <h1 className="font-bold text-4xl">CV</h1>
+        <h1 className="font-bold text-4xl">Contact list</h1>
         <div className="flex gap-x-8">
           <Select
             value={selectedUser}
