@@ -2,11 +2,20 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "../context/AuthProvider";
 import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
+import useUserByIdQuery from "@/hooks/users/useUserByIdQuery";
 
 const Sidebar = () => {
   const { user, isAdmin, signOut } = useAuth();
+  const { data: profile, isLoading: isProfileLoading } = useUserByIdQuery();
   const location = useLocation();
   const { pathname } = location;
+
+  const getDisplayName = () => {
+    if (profile.first_name && profile.last_name) {
+      return `${profile.first_name} ${profile.last_name}`;
+    }
+    return user.user_metadata.full_name;
+  };
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -41,6 +50,8 @@ const Sidebar = () => {
     },
   ];
 
+  console.log(profile);
+
   return (
     <nav className="flex flex-col items-center justify-between gap-x-8 py-8 px-16 border-r bg-white">
       <div>
@@ -72,7 +83,7 @@ const Sidebar = () => {
             src={user.user_metadata.avatar_url}
             className="w-8 h-8 rounded-full"
           />
-          <Link to="/profile">{user.user_metadata.full_name}</Link>
+          <Link to="/profile">{getDisplayName()}</Link>
         </div>
         <Button variant="outline" onClick={handleLogout}>
           Logout

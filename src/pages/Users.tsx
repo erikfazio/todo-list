@@ -16,8 +16,6 @@ function Skills() {
   const { user, isAdmin, signOut } = useAuth();
   const { data: users, isLoading: isUsersLoading } = useUsersQuery();
 
-  console.log(users);
-
   return (
     <main className="mt-16 container mx-auto flex flex-col gap-y-8">
       <div className="flex justify-between">
