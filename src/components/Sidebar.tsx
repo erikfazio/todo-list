@@ -3,6 +3,13 @@ import { useAuth } from "../context/AuthProvider";
 import { Link, useLocation } from "react-router-dom";
 import clsx from "clsx";
 import useUserByIdQuery from "@/hooks/users/useUserByIdQuery";
+import {
+  PiHouseBold,
+  PiUserBold,
+  PiListBulletsBold,
+  PiUserListBold,
+  PiReadCvLogoBold,
+} from "react-icons/pi";
 
 const Sidebar = () => {
   const { user, isAdmin, signOut } = useAuth();
@@ -34,26 +41,31 @@ const Sidebar = () => {
       value: "/dashboard",
       label: "Dashboard",
       isAdminOnly: false,
+      icon: <PiHouseBold />,
     },
     {
       value: "/skills",
       label: "Skills",
       isAdminOnly: false,
+      icon: <PiListBulletsBold />,
     },
     {
       value: "/users",
       label: "Users",
       isAdminOnly: false,
+      icon: <PiUserBold />,
     },
     {
       value: "/cv",
       label: "CV",
       isAdminOnly: true,
+      icon: <PiReadCvLogoBold />,
     },
     {
       value: "/contact-list",
       label: "Contact list",
       isAdminOnly: false,
+      icon: <PiUserListBold />,
     },
   ];
 
@@ -63,11 +75,12 @@ const Sidebar = () => {
     <nav className="flex flex-col items-center justify-between gap-x-8 py-8 px-16 border-r bg-white">
       <div>
         <span className="font-bold text-lg">Internal tool</span>
-        <ul className="flex flex-col gap-y-8 mt-16 items-center gap-x-8">
-          {pages.map(({ value, label, isAdminOnly }) => {
+        <ul className="flex flex-col gap-y-8 mt-16 items-start gap-x-8">
+          {pages.map(({ value, label, isAdminOnly, icon }) => {
             if ((isAdminOnly && isAdmin()) || !isAdminOnly) {
               return (
-                <li key={value}>
+                <li key={value} className="flex items-center gap-x-4">
+                  {icon}
                   <Link
                     to={value}
                     className={clsx(
