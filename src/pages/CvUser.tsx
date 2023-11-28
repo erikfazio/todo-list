@@ -37,8 +37,8 @@ const CvUser = () => {
   const deleteUserSkill = useDeleteUserSkillMutation();
 
   // State
-  const [selectedSkill, setSelectedSkill] = useState();
-  const [selectedSkillLevel, setSelectedSkillLevel] = useState();
+  const [selectedSkill, setSelectedSkill] = useState(null);
+  const [selectedSkillLevel, setSelectedSkillLevel] = useState(null);
 
   const filteredSkills = () =>
     skills?.filter(
@@ -55,8 +55,8 @@ const CvUser = () => {
       },
       {
         onSuccess: () => {
-          setSelectedSkill("");
-          setSelectedSkillLevel("");
+          setSelectedSkill(null);
+          setSelectedSkillLevel(null);
         },
       }
     );
@@ -116,7 +116,7 @@ const CvUser = () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Skill</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Level</TableHead>
               <TableHead>Actions</TableHead>
             </TableRow>

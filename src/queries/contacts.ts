@@ -1,10 +1,7 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export function getContactsByUserId(client: SupabaseClient, userId: string) {
-  return client
-    .from("contacts")
-    .select("to:users!to_id(*), is_favorite")
-    .eq("from_id", userId);
+  return client.from("contacts").select("*").eq("user_id", userId);
 }
 
 export function addContact(client: SupabaseClient, data: any) {
@@ -12,22 +9,22 @@ export function addContact(client: SupabaseClient, data: any) {
 }
 
 export function updateContact(client: SupabaseClient, data: any) {
-  const { from_id, to_id } = data;
+  const { user_id, type } = data;
   return client
     .from("contacts")
     .update(data)
-    .eq("from_id", from_id)
-    .eq("to_id", to_id);
+    .eq("user_id", user_id)
+    .eq("type", type);
 }
 
 export function deleteContact(
   client: SupabaseClient,
-  fromId: string,
-  toId: string
+  userId: string,
+  type: string
 ) {
   return client
     .from("contacts")
     .delete()
-    .eq("from_id", fromId)
-    .eq("to_id", toId);
+    .eq("user_id", userId)
+    .eq("type", type);
 }
