@@ -1,7 +1,11 @@
 import { SupabaseClient } from "@supabase/supabase-js";
 
 export function getContactsByUserId(client: SupabaseClient, userId: string) {
-  return client.from("contacts").select("*").eq("user_id", userId);
+  return client
+    .from("contacts")
+    .select("*")
+    .eq("user_id", userId)
+    .order("is_favorite", { ascending: false });
 }
 
 export function addContact(client: SupabaseClient, data: any) {
